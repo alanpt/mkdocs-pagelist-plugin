@@ -1,0 +1,2 @@
+[mkdocs.plugins]
+pagelist = mkdocs_pagelist_plugin:PageListPlugin
