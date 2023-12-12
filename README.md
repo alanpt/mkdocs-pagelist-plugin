@@ -1,7 +1,3 @@
-### README.md for PageListPlugin
-
----
-
 # PageListPlugin for MkDocs
 
 PageListPlugin is a plugin for MkDocs that dynamically generates lists of pages based on tags, folders, and other criteria directly within your markdown files. It's especially useful for creating dynamic references to other parts of your documentation based on shared tags or directory structure. It may need tweaking for your needs.  The use of grouping by folders is helpful if you use the Diátaxis framework to organise your documents.  I have all my documents listed under the folders - Tutorials, How-to, Reference, 
