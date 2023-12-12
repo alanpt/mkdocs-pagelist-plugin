@@ -1,7 +1,3 @@
-Sure, I can create a standard GitHub README file for your MkDocs `PageListPlugin`. Below is the README in the style of other MkDocs plugin READMEs:
-
----
-
 ### README.md for PageListPlugin
 
 ---
