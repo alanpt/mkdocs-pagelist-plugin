@@ -3,6 +3,7 @@
 PageListPlugin is a plugin for MkDocs that dynamically generates lists of pages based on tags, folders, and other criteria directly within your markdown files. It's especially useful for creating dynamic references to other parts of your documentation based on shared tags or directory structure. It may need tweaking for your needs.  The use of grouping by folders is helpful if you use the Diátaxis framework to organise your documents.  I have all my documents listed under the folders - Tutorials, How-to, Reference, 
 Explanation. Tags are used to cross connect across those folders with features, functions or intended audience. 
 
+
 ## Installation
 
 To install the plugin, use the following command:
@@ -10,11 +11,13 @@ To install the plugin, use the following command:
 ```bash
 pip install mkdocs-pagelist-plugin
 ```
-If you use a `ci.yml` file in Github Actions then add the line:
+
+For Github Actions add the following line in the appropriate place in the `ci.yml` file:
 
 ```yaml
-      - run: pip install mkdocs-pagelist-plugin  
+- run: pip install mkdocs-pagelist-plugin  
 ```
+
 
 ## Usage
 
@@ -31,6 +34,7 @@ plugins:
 
 
 ## Examples
+
 
 - **List other pages sharing the same tags as the current page**:
   ```
