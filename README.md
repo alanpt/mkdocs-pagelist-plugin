@@ -10,6 +10,11 @@ To install the plugin, use the following command:
 ```bash
 pip install mkdocs-pagelist-plugin
 ```
+If you use a `ci.yml` file in Github Actions then add the line:
+
+```yaml
+      - run: pip install mkdocs-pagelist-plugin  
+```
 
 ## Usage
 
@@ -18,10 +23,12 @@ To use the PageListPlugin, add it to your `mkdocs.yml` configuration file under 
 ```yaml
 plugins:
   - search
-  - mkdocs-pagelist-plugin
+  - pagelist
 ```
 
 > **Note**: If you have no `plugins` entry in your config file yet, you'll need to add it before adding PageListPlugin, as MkDocs enables only the `search` plugin by default.
+
+
 
 ## Examples
 
