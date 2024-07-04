@@ -1,4 +1,5 @@
 import re
+import os
 from mkdocs.plugins import BasePlugin
 from urllib.parse import urlsplit
 from pathlib import Path
