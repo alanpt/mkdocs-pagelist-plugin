@@ -41,7 +41,7 @@ class PageListPlugin(BasePlugin):
 
         for match in matches:
             if match.group(1) == 'i':
-                page_list_output = self.generate_page_list_info_output(self.page_list_info)
+                page_list_output = self.generate_page_list_info_output(self.page_list_info, page)
                 output = output.replace(match.group(0), page_list_output, 1)
             else:
                 group_folders = match.group(1) == 'g'
@@ -54,10 +54,11 @@ class PageListPlugin(BasePlugin):
 
         return output
 
-    def generate_page_list_info_output(self, page_list_info):
+    def generate_page_list_info_output(self, page_list_info, current_page):
         output = '<ol class="page-list-info">'
         for info in page_list_info:
-            output += f"<li><a href='../../{info['page_url']}'>{info['page_url']}</a> - {info['page_list_code']}</li>"
+            relative_path = self._get_relative_path(current_page.url, info['page_url'])
+            output += f"<li><a href='{relative_path}'>{info['page_url']}</a> - {info['page_list_code']}</li>"
         output += '</ol>'
         return output
 
@@ -89,7 +90,8 @@ class PageListPlugin(BasePlugin):
             for page in pages:
                 if limit is not None and item_count >= limit:
                     break  # Stop adding links once the limit is reached
-                result += f'<li><a href="../../{page.url}">{page.title}</a></li>\n'
+                relative_path = self._get_relative_path(current_page.url, page.url)
+                result += f'<li><a href="{relative_path}">{page.title}</a></li>\n'
                 item_count += 1
             result += '</ul>\n'
             if limit is not None and item_count >= limit:
@@ -119,6 +121,13 @@ class PageListPlugin(BasePlugin):
         relevant_parts = path_parts[:-1]
         folder_title = ' '.join(part.capitalize() for part in relevant_parts)
         return folder_title
+
+    def _get_relative_path(self, from_url, to_url):
+        from_parts = Path(urlsplit(from_url).path).parts
+        to_parts = Path(urlsplit(to_url).path).parts
+        common_prefix_length = len(os.path.commonprefix([from_parts, to_parts]))
+        relative_path = ['..'] * (len(from_parts) - common_prefix_length - 1) + list(to_parts[common_prefix_length:])
+        return '/'.join(relative_path)
 
     def on_files(self, files, config):
         self.files = files

@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: mkdocs-pagelist-plugin
-Version: 0.1.0
+Version: 0.2.1
 Summary: A MkDocs plugin to list pages based on tags and folders
 Home-page: https://github.com/alanpt/mkdocs-pagelist-plugin
 Author: Alan Proctor-Thomson
@@ -8,20 +8,12 @@ Author-email: alanpt@gmail.com
 License: MIT
 Keywords: mkdocs python markdown pagelist
 Description-Content-Type: text/markdown
-Requires-Dist: mkdocs>=1.0
-
-Sure, I can create a standard GitHub README file for your MkDocs `PageListPlugin`. Below is the README in the style of other MkDocs plugin READMEs:
-
----
-
-### README.md for PageListPlugin
-
----
 
 # PageListPlugin for MkDocs
 
 PageListPlugin is a plugin for MkDocs that dynamically generates lists of pages based on tags, folders, and other criteria directly within your markdown files. It's especially useful for creating dynamic references to other parts of your documentation based on shared tags or directory structure. It may need tweaking for your needs.  The use of grouping by folders is helpful if you use the DiÃ¡taxis framework to organise your documents.  I have all my documents listed under the folders - Tutorials, How-to, Reference, 
 Explanation. Tags are used to cross connect across those folders with features, functions or intended audience. 
+
 
 ## Installation
 
@@ -31,6 +23,13 @@ To install the plugin, use the following command:
 pip install mkdocs-pagelist-plugin
 ```
 
+For Github Actions add the following line in the appropriate place in the `ci.yml` file:
+
+```yaml
+- run: pip install mkdocs-pagelist-plugin  
+```
+
+
 ## Usage
 
 To use the PageListPlugin, add it to your `mkdocs.yml` configuration file under the plugins section:
@@ -38,12 +37,15 @@ To use the PageListPlugin, add it to your `mkdocs.yml` configuration file under 
 ```yaml
 plugins:
   - search
-  - mkdocs-pagelist-plugin
+  - pagelist
 ```
 
 > **Note**: If you have no `plugins` entry in your config file yet, you'll need to add it before adding PageListPlugin, as MkDocs enables only the `search` plugin by default.
 
+
+
 ## Examples
+
 
 - **List other pages sharing the same tags as the current page**:
   ```
