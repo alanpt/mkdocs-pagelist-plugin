@@ -35,6 +35,7 @@ plugins:
 
 ## Examples
 
+> **Note**: You always have to specify either 'i', 'g', or digit as a first argument. Setting `0` as a first argument means unlimited amount of generated links.
 
 - **List other pages sharing the same tags as the current page**:
   ```
@@ -51,19 +52,29 @@ plugins:
   {pagelist g}
   ```
 
-- **List pages tagged with 'draft'**:
+- **List 5 pages tagged with 'draft'**:
   ```
   {pagelist 5 draft}
   ```
 
-- **Combine multiple tags ('draft' and 'leads')**:
+- **List all pages tagged with 'draft'**:
+  ```
+  {pagelist 0 draft}
+  ```
+
+- **List 10 pages tagged with either 'draft' or 'leads'**:
   ```
   {pagelist 10 draft leads}
   ```
 
-- **Include pages with 'leads' tag but exclude those with 'draft' tag**:
+- **List all pages with 'leads' tag but exclude those with 'draft' tag**:
   ```
-  {pagelist 10 -draft leads}
+  {pagelist 0 -draft leads}
+  ```
+
+- **List all pages tagged with both 'leads' and 'draft' tags but exclude those with 'test' tag**:
+  ```
+  {pagelist 0 +draft +leads -test}
   ```
 
 - **Group pages by folder, tagged with 'leads'**:

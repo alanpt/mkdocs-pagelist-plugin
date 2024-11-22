@@ -32,13 +32,13 @@ class PageListPlugin(BasePlugin):
                 print(f"Error reading file {file.abs_src_path}: {e}")
                 return
 
-        for match in re.finditer(r'\{pagelist(?:\s+(\d+|g|i)\s*(.*?))?(?:\|\s*(.*))?\}', content):
+        for match in re.finditer(r'\{pagelist(?:\s+(\d+|g$|i$)\s*(.*?))?(?:\|\s*(.*))?\}', content):
             page_list_code = match.group(0)
             page_url = file.url
             self.page_list_info.append({'page_url': page_url, 'page_list_code': page_list_code})
 
     def on_post_page(self, output, page, config):
-        matches = re.finditer(r'\{pagelist(?:\s+(\d+|g|i)\s*(.*?))?(?:\|\s*(.*))?\}', output)
+        matches = re.finditer(r'\{pagelist(?:\s+(\d+|g$|i$)\s*(.*?))?(?:\|\s*(.*))?\}', output) # Nothing is generated if either digit, 'i' or 'g' is not the first argument
 
         for match in matches:
             if match.group(1) == 'i':
@@ -48,6 +48,8 @@ class PageListPlugin(BasePlugin):
                 group_folders = match.group(1) == 'g'
                 tags_to_filter = match.group(2).strip().split() if match.group(2) else page.meta.get('tags', [])
                 limit = int(match.group(1)) if match.group(1) and match.group(1).isdigit() else None
+                if limit == 0:  # We expect limit of generated links to be defined all the time (if 'g' or 'i' option is not used). 0 means unlimited.
+                    limit = None
                 folders_to_filter = match.group(3).strip().split() if match.group(3) else []
 
                 filtered_list = self._format_links_by_folder_and_tag(tags_to_filter, page, config, group_folders, limit, folders_to_filter)
@@ -92,8 +94,9 @@ class PageListPlugin(BasePlugin):
                 if limit is not None and item_count >= limit:
                     break  # Stop adding links once the limit is reached
                 relative_path = self._get_relative_path(current_page.url, page.url)
-                result += f'<li><a href="{relative_path}">{page.title}</a></li>\n'
-                item_count += 1
+                if current_page.url != page.url:  # Don't generate link for myself
+                    result += f'<li><a href="{relative_path}">{page.title}</a></li>\n'
+                    item_count += 1
             result += '</ul>\n'
             if limit is not None and item_count >= limit:
                 break  # Break the outer loop as well if the limit is reached
