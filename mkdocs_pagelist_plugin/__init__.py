@@ -60,7 +60,7 @@ class PageListPlugin(BasePlugin):
     def generate_page_list_info_output(self, page_list_info, current_page):
         output = '<ol class="page-list-info">'
         for info in page_list_info:
-            relative_path = self._get_relative_path(current_page.url, info['page_url'])
+            relative_path = self.realrelpath(current_page.url, info['page_url'])
             output += f"<li><a href='{relative_path}'>{info['page_url']}</a> - {info['page_list_code']}</li>"
         output += '</ol>'
         return output
@@ -93,7 +93,7 @@ class PageListPlugin(BasePlugin):
             for page in pages:
                 if limit is not None and item_count >= limit:
                     break  # Stop adding links once the limit is reached
-                relative_path = self._get_relative_path(current_page.url, page.url)
+                relative_path = self.realrelpath(current_page.url, page.url)
                 if current_page.url != page.url:  # Don't generate link for myself
                     result += f'<li><a href="{relative_path}">{page.title}</a></li>\n'
                     item_count += 1
@@ -126,12 +126,30 @@ class PageListPlugin(BasePlugin):
         folder_title = ' '.join(part.capitalize() for part in relevant_parts)
         return folder_title
 
-    def _get_relative_path(self, from_url, to_url):
-        from_parts = Path(urlsplit(from_url).path).parts
-        to_parts = Path(urlsplit(to_url).path).parts
-        common_prefix_length = len(os.path.commonprefix([from_parts, to_parts]))
-        relative_path = ['..'] * (len(from_parts) - common_prefix_length - 1) + list(to_parts[common_prefix_length:])
-        return '/'.join(relative_path)
+    # Copy the realrelpath function here
+    def realrelpath(self, origin, dest):
+        '''Get the relative path between two paths, accounting for filepaths'''
+
+        # get the absolute paths so that strings can be compared
+        origin = os.path.abspath(origin)
+        dest = os.path.abspath(dest)
+
+        # find out if the origin and destination are filepaths
+        origin_isfile = os.path.isfile(origin)
+        dest_isfile = os.path.isfile(dest)
+
+        # if dealing with filepaths,
+        if origin_isfile or dest_isfile:
+            # get the base filename
+            filename = os.path.basename(dest) if origin_isfile else os.path.basename(dest)
+            # in cases where we're dealing with a file, use only the directory name
+            origin = os.path.dirname(origin) if origin_isfile else origin
+            dest = os.path.dirname(dest) if dest_isfile else dest
+            # get the relative path between directories, then re-add the filename
+            return os.path.join(os.path.relpath(dest, origin), filename)
+        else:
+            # if not dealing with any filepaths, just run relpath as usual
+            return os.path.relpath(dest, origin)
 
     def on_files(self, files, config):
         self.files = files
